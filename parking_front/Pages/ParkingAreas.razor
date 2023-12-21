@@ -1,0 +1,44 @@
+﻿@page "/ParkingAreas"
+@using parking_front.DAL
+@using parking_front.Data
+
+<h1>Available Parking Areas</h1>
+
+@if (parkingAreas != null && parkingAreas.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Location</th>
+                <th>Total Spaces</th>
+                <th>Available Spaces</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var area in parkingAreas)
+            {
+                <tr>
+                    <td>@area.Name</td>
+                    <td>@area.Location</td>
+                    <td>@area.TotalSpaces</td>
+                    <td>@area.AvailableSpaces</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No parking areas available.</p>
+}
+
+@code {
+    List<ParkingArea> parkingAreas = new List<ParkingArea>();
+    private DataAccess dataAccess = new DataAccess();
+
+    protected override void OnInitialized()
+    {
+        parkingAreas = dataAccess.GetParkingAreas();
+    }
+}

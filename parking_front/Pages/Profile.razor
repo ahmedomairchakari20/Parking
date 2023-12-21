@@ -1,0 +1,60 @@
+﻿
+@page "/profile"
+
+<h3 style="align-content:center">User Profile</h3>
+<style>
+    /* CSS styles for UserProfile component */
+    .user-profile {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .profile-section {
+        margin-bottom: 15px;
+    }
+
+        .profile-section label {
+            font-weight: bold;
+            display: inline-block;
+            width: 120px;
+        }
+
+    .profile-image {
+        max-width: 200px;
+        border-radius: 5px;
+        margin-top: 10px;
+    }
+</style>
+
+<div class="user-profile">
+    <div class="profile-section">
+        <label>Name:</label>
+        <span>Omair Chakari</span>
+    </div>
+    <div class="profile-section">
+        <label>Email:</label>
+        <span>Omair@gmail.com</span>
+    </div>
+    <div class="profile-section">
+        <label>Phone Number:</label>
+        <span>+353123456789</span>
+    </div>
+    <div class="profile-section">
+        <label>Gender:</label>
+        <span>Male</span>
+    </div>
+    <div class="profile-section">
+        <label>Age:</label>
+        <span>34</span>
+    </div>
+    
+</div>
+@code {
+    
+    protected override void OnInitialized()
+    {
+    }
+}

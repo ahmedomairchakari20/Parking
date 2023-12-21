@@ -1,0 +1,38 @@
+﻿@page "/"
+@using parking_front.DAL
+@using parking_front.Data
+@inject NavigationManager NavigationManager
+
+<h3>Login</h3>
+
+<form @onsubmit="LoginUser">
+    <div class="form-group">
+        <label for="loginEmail">Email</label>
+        <input type="email" class="form-control" @bind="loginEmail" />
+    </div>
+    <div class="form-group">
+        <label for="loginPassword">Password</label>
+        <input type="password" class="form-control" @bind="loginPassword" />
+    </div><br />
+    <button type="submit" class="btn btn-primary">Login</button>
+</form><br />
+<a href="/register">Not a User? Register Now!</a>
+@code {
+    private string loginEmail;
+    private string loginPassword;
+    private DataAccess dataAccess = new DataAccess();
+
+    private async Task LoginUser()
+    {
+        var validationResult = dataAccess.ValidateUser(loginEmail, loginPassword);
+        if (validationResult.IsValid)
+        {
+            NavigationManager.NavigateTo("/welcome");
+        }
+        else
+        {
+            Console.WriteLine("Login Failed");
+            Console.WriteLine(validationResult);
+        }
+    }
+}

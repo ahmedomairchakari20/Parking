@@ -1,0 +1,27 @@
+﻿@inherits LayoutComponentBase
+
+
+
+<div class="main-layout">
+    <div style="width:auto; height:fit-content; background-color:darkviolet; padding: 10px;" class="top-bar">
+        <div class="container">
+            <div style="color: white; text-align: center; font-weight: bold; font-size: 1.5em;">
+                 Parking System 
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+      
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>

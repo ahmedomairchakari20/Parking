@@ -1,0 +1,109 @@
+﻿@page "/Booking"
+@using parking_front.DAL
+@using parking_front.Data
+@using System.Threading.Tasks
+@inject NavigationManager NavigationManager
+
+<h1>Booking: Select Time Slot</h1>
+
+@if (parkingAreas != null && parkingAreas.Count > 0)
+{
+    <label for="parkingArea">Select Parking Area:</label>
+    <select id="parkingArea" @bind="selectedParkingAreaId">
+        <option value="">Select Parking Area</option>
+        @foreach (var area in parkingAreas)
+        {
+            <option value="@area.ParkingAreaID">@area.Name</option>
+        }
+    </select>
+    <br />
+    @if (!string.IsNullOrEmpty(selectedParkingAreaId))
+    {
+        <label for="timeSlot">Select Time Slot:</label>
+        <select id="timeSlot" @bind="selectedTimeSlot">
+            <option value="">Select Time Slot</option>
+            @foreach (var slot in availableTimeSlots)
+            {
+                <option value="@slot">@slot</option>
+            }
+        </select>
+        <br />
+        <button @onclick="BookParking">Book Parking</button>
+    }
+}
+else
+{
+    <p>No parking areas available.</p>
+}
+
+@code {
+    List<ParkingArea> parkingAreas = new List<ParkingArea>();
+    private string _selectedParkingAreaId = "";
+    private string selectedParkingAreaId
+    {
+        get => _selectedParkingAreaId;
+        set
+        {
+            if (_selectedParkingAreaId != value)
+            {
+                _selectedParkingAreaId = value;
+                LoadAvailableTimeSlots();
+            }
+        }
+    }
+    private string selectedTimeSlot = "";
+    private List<string> availableTimeSlots = new List<string>();
+    DataAccess dataAccess = new DataAccess();
+    protected override async Task OnInitializedAsync()
+    {
+
+        parkingAreas = dataAccess.GetParkingAreas();
+    }
+
+    private async Task LoadAvailableTimeSlots()
+    {
+        if (!string.IsNullOrEmpty(selectedParkingAreaId))
+        {
+            List<Booking> bookedSlots = dataAccess.GetBookedParkingSlots(int.Parse(selectedParkingAreaId));
+            List<string> totalSlots = timeSlots; 
+            availableTimeSlots = timeSlots.Except(bookedSlots.Select(slot => slot.StartTime)).ToList();
+            Console.WriteLine(bookedSlots);
+            Console.WriteLine(timeSlots);
+            Console.WriteLine(availableTimeSlots);
+        }
+    }
+
+    private List<string> timeSlots = new List<string>
+{
+    "00:00 - 01:00", "01:00 - 02:00", "02:00 - 03:00", "03:00 - 04:00",
+    "04:00 - 05:00", "05:00 - 06:00", "06:00 - 07:00", "07:00 - 08:00",
+    "08:00 - 09:00", "09:00 - 10:00", "10:00 - 11:00", "11:00 - 12:00",
+    "12:00 - 13:00", "13:00 - 14:00", "14:00 - 15:00", "15:00 - 16:00",
+    "16:00 - 17:00", "17:00 - 18:00", "18:00 - 19:00", "19:00 - 20:00",
+    "20:00 - 21:00", "21:00 - 22:00", "22:00 - 23:00", "23:00 - 00:00"
+};
+
+    private async Task BookParking()
+    {
+        // Assume the user has already paid and attributes are valid
+        if (!string.IsNullOrEmpty(selectedParkingAreaId) && !string.IsNullOrEmpty(selectedTimeSlot))
+        {
+            string[] timeSplit = selectedTimeSlot.Split(" - ");
+            Console.WriteLine(timeSplit[0]);
+            Console.WriteLine(timeSplit[1]);
+
+            // Create a Booking object with necessary attributes
+            Booking booking = new Booking
+                {
+                    UserID = 1,
+                    ParkingAreaID = int.Parse(selectedParkingAreaId),
+                    StartTime = timeSplit[0],
+                    EndTime = timeSplit[1],
+                    PaymentStatus = true 
+                };
+
+            dataAccess.MakeBooking(booking);
+            NavigationManager.NavigateTo("/welcome");
+        }
+    }
+}

@@ -1,0 +1,54 @@
+﻿@page "/register"
+@using parking_front.DAL
+@using parking_front.Data
+@inject NavigationManager NavigationManager
+
+<h3>Register</h3>
+
+<form @onsubmit="RegisterUser">
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" @bind="email" />
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" @bind="password" />
+    </div>
+    <div class="form-group">
+        <label for="firstName">First Name</label>
+        <input type="text" class="form-control" @bind="firstName" />
+    </div>
+    <div class="form-group">
+        <label for="lastName">Last Name</label>
+        <input type="text" class="form-control" @bind="lastName" />
+    </div>
+    <div class="form-group">
+        <label for="phone">Phone</label>
+        <input type="text" class="form-control" @bind="phone" />
+    </div><br />
+    <button type="submit" class="btn btn-primary">Register</button>
+</form>
+<br />
+<a href="login">Go Back to Login</a>
+
+@code {
+    private string email;
+    private string password;
+    private string firstName;
+    private string lastName;
+    private string phone;
+    private DataAccess dataAccess = new DataAccess();
+
+    private async Task RegisterUser()
+    {
+        bool registrationResult = dataAccess.RegisterUser(email, password, firstName, lastName, phone);
+        if (registrationResult)
+        {
+
+            NavigationManager.NavigateTo("/");
+        }
+        else
+        {
+        }
+    }
+}
